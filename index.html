@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>АРТерия — Арт-пространство в Перми</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #FFFFFF;
+            color: #1A1A1A;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        h2 {
+            font-size: clamp(32px, 6vw, 48px);
+            margin-bottom: 48px;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #D43838;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            font-size: 18px;
+            font-weight: 500;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        .btn-primary:hover {
+            background: #B82D2D;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(212,56,56,0.3);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1.5px solid #D43838;
+            color: #D43838;
+            padding: 12px 28px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-secondary:hover {
+            background: rgba(212,56,56,0.05);
+        }
+        .btn-ghost {
+            background: none;
+            border: none;
+            color: #6B6B6B;
+            cursor: pointer;
+            padding: 8px 0;
+            font-size: 15px;
+        }
+        .btn-ghost:hover {
+            color: #D43838;
+            text-decoration: underline;
+        }
+
+        /* Hero с размытыми пятнами */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: #FDFCF8;
+            overflow: hidden;
+        }
+        .paint-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(50px);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .blob-red { background: #D43838; width: 350px; height: 350px; top: -100px; left: -80px; filter: blur(70px); }
+        .blob-blue { background: #4A90E2; width: 400px; height: 400px; bottom: -120px; right: -100px; filter: blur(80px); }
+        .blob-orange { background: #F5A623; width: 280px; height: 280px; top: 40%; left: 15%; filter: blur(60px); }
+        .blob-green { background: #2E7D32; width: 300px; height: 300px; bottom: 20%; right: 10%; filter: blur(65px); opacity: 0.35; }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 24px;
+        }
+        h1 {
+            font-size: clamp(42px, 8vw, 64px);
+            margin-bottom: 24px;
+            color: #1A1A1A;
+        }
+        .hero-sub {
+            font-size: 18px;
+            margin-bottom: 32px;
+            color: #333;
+        }
+        .logo {
+            position: absolute;
+            top: 32px;
+            left: 32px;
+            z-index: 3;
+            font-size: 28px;
+            font-weight: 700;
+            color: #1A1A1A;
+            transition: all 0.3s ease;
+        }
+        .logo.scrolled {
+            font-size: 20px;
+            top: 16px;
+            left: 24px;
+        }
+        .social-icons {
+            position: absolute;
+            bottom: 32px;
+            left: 32px;
+            z-index: 3;
+            display: flex;
+            gap: 20px;
+        }
+        .social-icons a {
+            color: #1A1A1A;
+            text-decoration: none;
+            font-size: 14px;
+            opacity: 0.6;
+        }
+        .scroll-down {
+            position: absolute;
+            bottom: 32px;
+            right: 32px;
+            z-index: 3;
+            color: #1A1A1A;
+            font-size: 24px;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            opacity: 0.6;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* Блоки */
+        .two-columns { display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px; align-items: start; }
+        .theses { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px; }
+        .thesis-item { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+        .thesis-item.visible { opacity: 1; transform: translateY(0); }
+        .thesis-icon { font-size: 32px; margin-bottom: 12px; }
+        .collage { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .color-block { border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; min-height: 200px; }
+        .color-block:first-child { grid-row: span 2; min-height: 420px; }
+        .red-bg { background: linear-gradient(135deg, #D43838, #8B0000); }
+        .blue-bg { background: linear-gradient(135deg, #4A90E2, #2c5aa0); }
+        .orange-bg { background: linear-gradient(135deg, #F5A623, #D43838); }
+        .cards-scroll { display: flex; gap: 24px; overflow-x: auto; padding-bottom: 16px; }
+        .course-card { flex: 0 0 280px; background: #F7F6F4; border-radius: 32px; padding: 24px; transition: 0.3s; }
+        .course-card:hover { transform: translateY(-8px); box-shadow: 0 20px 30px -10px rgba(0,0,0,0.1); }
+        .course-price { font-size: 20px; font-weight: 700; color: #D43838; margin: 16px 0; }
+        .card-buttons { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+        .packages { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px; }
+        .package-card { background: #F7F6F4; border-radius: 32px; padding: 32px 24px; text-align: center; }
+        .schedule-item { display: grid; grid-template-columns: 100px 100px 1fr 80px auto; gap: 16px; align-items: center; padding: 16px 24px; background: #F9F9F9; border-radius: 60px; margin-bottom: 12px; }
+        .places-green { color: #2E7D32; font-weight: 500; }
+        .places-orange { color: #F5A623; font-weight: 500; }
+        .masonry { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .gallery-block { border-radius: 24px; min-height: 250px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; font-weight: 500; cursor: pointer; }
+        .teachers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: center; }
+        .teacher-card { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+        .teacher-card.visible { opacity: 1; transform: translateY(0); }
+        .teacher-avatar { width: 200px; height: 200px; border-radius: 50%; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; font-size: 64px; background: linear-gradient(135deg, #D43838, #4A90E2); }
+        .testimonials-slider { display: flex; gap: 32px; overflow-x: auto; padding-bottom: 16px; }
+        .testimonial-card { flex: 0 0 320px; background: #F7F6F4; padding: 32px; border-radius: 32px; }
+        .stars { color: #F5A623; font-size: 20px; margin-bottom: 16px; letter-spacing: 4px; }
+        .contacts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+        .map-placeholder { background: #E5E5E5; border-radius: 32px; overflow: hidden; }
+        form input { width: 100%; padding: 14px 20px; margin-bottom: 16px; border: 1px solid #E5E5E5; border-radius: 60px; font-size: 16px; }
+        form input:focus { outline: none; border-color: #D43838; }
+        footer { background: #1A1A1A; color: white; padding: 40px 0; text-align: center; }
+        .footer-social { display: flex; justify-content: center; gap: 24px; margin-top: 16px; }
+        .footer-social a { color: white; text-decoration: none; opacity: 0.7; transition: opacity 0.2s; }
+        .footer-social a:hover { opacity: 1; }
+
+        /* ПОПАП */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background: white;
+            max-width: 520px;
+            width: 90%;
+            border-radius: 48px;
+            padding: 40px 36px;
+            position: relative;
+            animation: popupFade 0.3s ease;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.2);
+        }
+        @keyframes popupFade {
+            from { opacity: 0; transform: scale(0.92) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .close-popup {
+            position: absolute;
+            right: 24px;
+            top: 24px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #6B6B6B;
+            transition: all 0.2s;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        .close-popup:hover {
+            color: #D43838;
+            background: rgba(212,56,56,0.1);
+        }
+        .popup-icon { text-align: center; font-size: 56px; margin-bottom: 16px; }
+        .popup-content h3 { font-size: 28px; text-align: center; margin-bottom: 12px; color: #1A1A1A; font-weight: 600; }
+        .popup-booking-info { background: #F7F6F4; border-radius: 60px; padding: 12px 20px; text-align: center; margin-bottom: 24px; font-size: 15px; color: #D43838; font-weight: 500; }
+        .popup-content form input { width: 100%; padding: 16px 20px; margin-bottom: 14px; border: 1.5px solid #E5E5E5; border-radius: 60px; font-size: 16px; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+        .popup-content form input:focus { outline: none; border-color: #D43838; box-shadow: 0 0 0 3px rgba(212,56,56,0.1); }
+        .popup-content form button { width: 100%; margin-top: 8px; padding: 16px; font-size: 18px; }
+        .popup-divider { display: flex; align-items: center; margin: 24px 0 16px; color: #6B6B6B; font-size: 13px; }
+        .popup-divider::before, .popup-divider::after { content: ""; flex: 1; height: 1px; background: #E5E5E5; }
+        .popup-divider span { padding: 0 16px; }
+        .company-btn { width: 100%; background: transparent; border: 1.5px dashed #D43838; color: #D43838; padding: 14px; border-radius: 60px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .company-btn:hover { background: rgba(212,56,56,0.05); border: 1.5px solid #D43838; }
+        .popup-policy { font-size: 12px; color: #6B6B6B; text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid #E5E5E5; }
+
+        /* КАСТОМНОЕ ОКНО (вместо alert) */
+        .custom-alert {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+        }
+        .custom-alert-content {
+            background: white;
+            max-width: 400px;
+            width: 85%;
+            border-radius: 48px;
+            padding: 36px 32px;
+            text-align: center;
+            animation: popupFade 0.3s ease;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.2);
+        }
+        .custom-alert-icon { font-size: 64px; margin-bottom: 16px; }
+        .custom-alert-content p { font-size: 18px; line-height: 1.5; color: #1A1A1A; margin-bottom: 28px; }
+        .custom-alert-btn {
+            background: #D43838;
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        .custom-alert-btn:hover {
+            background: #B82D2D;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            section { padding: 48px 0; }
+            .two-columns, .packages, .contacts-grid { grid-template-columns: 1fr; gap: 32px; }
+            .schedule-item { grid-template-columns: 1fr 1fr; border-radius: 24px; text-align: center; gap: 8px; }
+            .masonry { grid-template-columns: 1fr; }
+            .teachers-grid { grid-template-columns: 1fr; }
+            .theses { grid-template-columns: 1fr; }
+            .popup-content { padding: 32px 24px; }
+            .popup-content h3 { font-size: 24px; }
+            .custom-alert-content { padding: 28px 24px; }
+            .custom-alert-content p { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="logo" id="logo">АРТерия</div>
+<div class="social-icons">
+    <a href="https://vk.com/arteria_perm" target="_blank" rel="noopener noreferrer">VK</a>
+    <!-- Telegram и Instagram отсутствуют, ссылки удалены -->
+</div>
+<div class="scroll-down" onclick="document.getElementById('philosophy').scrollIntoView({behavior:'smooth'})">↓</div>
+
+<!-- Hero с размытыми пятнами -->
+<section class="hero">
+    <div class="paint-blob blob-red"></div>
+    <div class="paint-blob blob-blue"></div>
+    <div class="paint-blob blob-orange"></div>
+    <div class="paint-blob blob-green"></div>
+    <div class="hero-content">
+        <h1>Пространство, где рождаются смыслы<br>и оживают холсты</h1>
+        <div class="hero-sub">Мастер-классы • Курсы • Творческие встречи в центре Перми</div>
+        <button class="btn-primary" onclick="openBookingPopup('общее занятие')">Записаться на занятие</button>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Блок 2: О студии / Философия -->
+    <section id="philosophy">
+        <div class="two-columns">
+            <div>
+                <div style="font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(18px,4vw,22px);line-height:1.6">
+                    «АРТерия — это не про идеальные рисунки. Это про смелость взять кисть и начать, даже если последний раз ты держал её в школе. Здесь не оценивают. Здесь вдохновляют.»
+                </div>
+                <div class="theses">
+                    <div class="thesis-item"><div class="thesis-icon">🎨</div><strong>Свобода самовыражения</strong><br>Рисуйте так, как чувствуете</div>
+                    <div class="thesis-item"><div class="thesis-icon">🖌️</div><strong>Профессиональные материалы</strong><br>Краски, холсты, кисти — всё включено</div>
+                    <div class="thesis-item"><div class="thesis-icon">👥</div><strong>Художники-наставники</strong><br>Действующие художники</div>
+                    <div class="thesis-item"><div class="thesis-icon">💫</div><strong>Атмосфера без осуждения</strong><br>Ошибки — это часть творчества</div>
+                </div>
+            </div>
+            <div class="collage">
+                <div class="color-block red-bg">🎨 ИНТЕРЬЕР</div>
+                <div class="color-block blue-bg">🖌️ ПРОЦЕСС</div>
+                <div class="color-block orange-bg">😊 ЭМОЦИИ</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Блок 3: Направления и курсы -->
+    <section>
+        <h2>Что мы создаём</h2>
+        <div class="cards-scroll">
+            <div class="course-card"><h3>Мастер-классы</h3><div class="course-price">от 1500 ₽</div><div class="card-buttons"><button class="btn-ghost" onclick="openDetailPopup('Мастер-классы','Разовое занятие. Всё включено. 2 часа.')">Подробнее</button><button class="btn-secondary" onclick="openBookingPopup('Мастер-классы')">Записаться</button></div></div>
+            <div class="course-card"><h3>Живопись</h3><div class="course-price">от 4000 ₽</div><div class="card-buttons"><button class="btn-ghost" onclick="openDetailPopup('Живопись','Курс из 4 занятий. Масло, акрил, акварель.')">Подробнее</button><button class="btn-secondary" onclick="openBookingPopup('Живопись')">Записаться</button></div></div>
+            <div class="course-card"><h3>Занятия для детей</h3><div class="course-price">от 1200 ₽</div><div class="card-buttons"><button class="btn-ghost" onclick="openDetailPopup('Дети','6-12 лет. Развитие воображения.')">Подробнее</button><button class="btn-secondary" onclick="openBookingPopup('Занятия для детей')">Записаться</button></div></div>
+            <div class="course-card"><h3>Творческий лагерь</h3><div class="course-price">от 8000 ₽</div><div class="card-buttons"><button class="btn-ghost" onclick="openDetailPopup('Лагерь','5 дней, 5 техник.')">Подробнее</button><button class="btn-secondary" onclick="openBookingPopup('Творческий лагерь')">Записаться</button></div></div>
+            <div class="course-card"><h3>Дни рождения</h3><div class="course-price">от 5000 ₽</div><div class="card-buttons"><button class="btn-ghost" onclick="openDetailPopup('ДР','Праздник с МК. Именинник создаёт шедевр.')">Подробнее</button><button class="btn-secondary" onclick="openBookingPopup('Дни рождения')">Записаться</button></div></div>
+            <div class="course-card"><h3>Корпоративы</h3><div class="course-price">от 12000 ₽</div><div class="card-buttons"><button class="btn-ghost" onclick="openDetailPopup('Корпоративы','Team-building через творчество.')">Подробнее</button><button class="btn-secondary" onclick="openBookingPopup('Корпоративы')">Записаться</button></div></div>
+        </div>
+        <div class="packages">
+            <div class="package-card"><h3>Базовый</h3><p>2 часа</p><p>до 10 чел</p><p class="course-price">5000 ₽</p><button class="btn-secondary" onclick="openBookingPopup('Базовый пакет')">Забронировать</button></div>
+            <div class="package-card"><h3>Стандарт</h3><p>3 часа + бокал</p><p>до 20 чел</p><p class="course-price">8000 ₽</p><button class="btn-secondary" onclick="openBookingPopup('Стандарт пакет')">Забронировать</button></div>
+            <div class="package-card"><h3>Премиум</h3><p>4 часа + фуршет</p><p>до 30 чел</p><p class="course-price">12000 ₽</p><button class="btn-secondary" onclick="openBookingPopup('Премиум пакет')">Забронировать</button></div>
+        </div>
+    </section>
+
+    <!-- Блок 4: Расписание -->
+    <section>
+        <h2>Ближайшие события</h2>
+        <div class="schedule-item"><span>15 июня</span><span>19:00</span><span>Вечерний скетчинг</span><span class="places-green">8/10 🟢</span><button class="btn-ghost" onclick="openBookingPopup('Вечерний скетчинг')">Забронировать</button></div>
+        <div class="schedule-item"><span>17 июня</span><span>11:00</span><span>Детский акварельный день</span><span class="places-orange">3/8 🟠</span><button class="btn-ghost" onclick="openBookingPopup('Детский акварельный день')">Забронировать</button></div>
+        <div class="schedule-item"><span>20 июня</span><span>18:30</span><span>Арт-терапия</span><span class="places-green">2/12 🟢</span><button class="btn-ghost" onclick="openBookingPopup('Арт-терапия')">Забронировать</button></div>
+    </section>
+
+    <!-- Блок 5: Галерея -->
+    <section>
+        <h2>Атмосфера студии</h2>
+        <div class="masonry">
+            <div class="gallery-block red-bg" onclick="showCustomAlert('🏠', 'Интерьер студии: светлое, просторное пространство с большими окнами.')">🏠 ИНТЕРЬЕР</div>
+            <div class="gallery-block blue-bg" onclick="showCustomAlert('🎨', 'Процесс творчества: мазки кистью, смешивание красок.')">🎨 ПРОЦЕСС</div>
+            <div class="gallery-block orange-bg" onclick="showCustomAlert('😊', 'Эмоции учеников: радость, гордость за свои работы.')">😊 ЭМОЦИИ</div>
+            <div class="gallery-block" style="background: linear-gradient(135deg, #2E7D32, #1B5E20);" onclick="showCustomAlert('🖼️', 'Готовые работы учеников: от первых набросков до картин.')">🖼️ РАБОТЫ</div>
+            <div class="gallery-block red-bg" onclick="showCustomAlert('✨', 'Детали: краски, кисти, текстуры, холсты.')">✨ ДЕТАЛИ</div>
+            <div class="gallery-block blue-bg" onclick="showCustomAlert('🖌️', 'Мастер-классы: яркие моменты с наших мероприятий.')">🖌️ МАСТЕР-КЛАСС</div>
+        </div>
+    </section>
+
+    <!-- Блок 6: Наставники -->
+    <section>
+        <h2>Наставники</h2>
+        <div class="teachers-grid">
+            <div class="teacher-card"><div class="teacher-avatar">👩‍🎨</div><h3>Анна Репина</h3><p>живопись, коллаж</p><p style="font-family:'Playfair Display';font-style:italic">"Важно не уметь, а хотеть"</p></div>
+            <div class="teacher-card"><div class="teacher-avatar">👨‍🎨</div><h3>Дмитрий Петров</h3><p>графика, скетчинг</p><p style="font-family:'Playfair Display';font-style:italic">"Рисовать могут все"</p></div>
+            <div class="teacher-card"><div class="teacher-avatar">👩‍🎨</div><h3>Елена Власова</h3><p>акварель, текстиль</p><p style="font-family:'Playfair Display';font-style:italic">"Творчество — это воздух"</p></div>
+        </div>
+    </section>
+
+    <!-- Блок 7: Отзывы -->
+    <section>
+        <h2>Отзывы</h2>
+        <div class="testimonials-slider">
+            <div class="testimonial-card"><div class="stars">★★★★★</div>"Атмосфера волшебная, хожу каждую неделю. Преподаватели — душки!"<br><br><strong>— Екатерина, 32</strong></div>
+            <div class="testimonial-card"><div class="stars">★★★★★</div>"Ребёнок в восторге! Каждый ждёт занятия. Спасибо АРТерии!"<br><br><strong>— Михаил, отец</strong></div>
+            <div class="testimonial-card"><div class="stars">★★★★★</div>"Провели корпоратив — вся команда в восторге! Очень душевно."<br><br><strong>— Ольга, PR-менеджер</strong></div>
+        </div>
+    </section>
+
+    <!-- Блок 8: Контакты (ОБНОВЛЁННЫЙ) -->
+    <section>
+        <div class="contacts-grid">
+            <!-- Яндекс.Карта (актуальная) -->
+            <div class="map-placeholder">
+                <iframe src="https://yandex.ru/maps/org/arteriya/113949424724/?ll=56.143588%2C58.021229&z=15&l=map" 
+                        width="100%" 
+                        height="300" 
+                        frameborder="0" 
+                        style="border-radius: 32px; pointer-events: none;" 
+                        allowfullscreen>
+                </iframe>
+            </div>
+
+            <div>
+                <h3>Контакты</h3>
+                <p>
+                    <strong>📍 Адрес:</strong><br>
+                    г. Пермь, ул. Советской Армии, 72/4
+                </p>
+                <p>
+                    <strong>🕒 Часы работы:</strong><br>
+                    вт-вс 11:00–21:00
+                </p>
+                <p>
+                    <strong>📞 Телефон для записи:</strong><br>
+                    <a href="tel:+79991234567" style="color: #D43838; text-decoration: none; font-weight: 500;">+7 (999) 123-45-67</a>
+                </p>
+                
+                <form id="contactForm">
+                    <input type="text" placeholder="Имя" required>
+                    <input type="tel" placeholder="Телефон" required>
+                    <button type="submit" class="btn-primary" style="width:100%">Отправить заявку</button>
+                </form>
+                <p style="margin-top:16px; font-size:14px; color:#6B6B6B">
+                    Остались вопросы? Оставьте заявку — мы перезвоним
+                </p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- FOOTER (ПОДВАЛ) -->
+<footer>
+    <p>© АРТерия, 2026 | Политика конфиденциальности</p>
+    <div class="footer-social">
+        <a href="https://vk.com/arteria_perm" target="_blank" rel="noopener noreferrer">VK</a>
+        <!-- Telegram и Instagram отсутствуют -->
+    </div>
+</footer>
+
+<!-- ПОПАП ДЛЯ ЗАПИСИ -->
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <div class="close-popup" onclick="closePopup()">✕</div>
+        <div class="popup-icon">🎨</div>
+        <h3 id="popupTitle">Записаться</h3>
+        <div id="popupBookingInfo" class="popup-booking-info">Выберите занятие</div>
+        <form id="popupForm" onsubmit="submitPopupForm(event)">
+            <input type="text" id="popupName" placeholder="Имя *" required>
+            <input type="tel" id="popupPhone" placeholder="Телефон *" required>
+            <input type="text" id="popupMessenger" placeholder="Telegram или WhatsApp">
+            <button type="submit" class="btn-primary">Отправить заявку</button>
+        </form>
+        <div class="popup-divider"><span>или</span></div>
+        <button class="company-btn" onclick="showCompanyMessage()">👥 Придём с компанией? →</button>
+        <div class="popup-policy">Нажимая «Отправить», вы соглашаетесь с политикой конфиденциальности</div>
+    </div>
+</div>
+
+<!-- КАСТОМНОЕ ОКНО ДЛЯ СООБЩЕНИЙ -->
+<div id="customAlert" class="custom-alert">
+    <div class="custom-alert-content">
+        <div class="custom-alert-icon" id="alertIcon">🎉</div>
+        <p id="alertMessage">Сообщение</p>
+        <button class="custom-alert-btn" onclick="closeCustomAlert()">OK</button>
+    </div>
+</div>
+
+<script>
+    let currentBookingItem = '';
+
+    // Кастомное окно
+    function showCustomAlert(icon, message) {
+        document.getElementById('alertIcon').innerText = icon || '🎨';
+        document.getElementById('alertMessage').innerHTML = message;
+        document.getElementById('customAlert').style.display = 'flex';
+    }
+
+    function showSuccessMessage(name, phone, messenger) {
+        let message = `✨ Спасибо, ${name}! ✨<br><br>Мы уже рисуем для вас напоминание и свяжемся с вами по телефону ${phone} в ближайший час.<br><br>🎨 АРТерия — место, где рождаются смыслы`;
+        if (messenger) {
+            message += `<br><br>(Напишем также в ${messenger})`;
+        }
+        document.getElementById('alertIcon').innerText = '🎨✨';
+        document.getElementById('alertMessage').innerHTML = message;
+        document.getElementById('customAlert').style.display = 'flex';
+    }
+
+    function showCompanyMessage() {
+        document.getElementById('alertIcon').innerText = '👥🎉';
+        document.getElementById('alertMessage').innerHTML = 'Отлично! Компанией всегда веселее!<br><br>Мы подберём для вас удобную дату, формат и рассчитаем скидку.<br><br>Оставьте заявку в форме выше, и менеджер свяжется с вами для подбора формата.';
+        document.getElementById('customAlert').style.display = 'flex';
+    }
+
+    function closeCustomAlert() {
+        document.getElementById('customAlert').style.display = 'none';
+    }
+
+    function openDetailPopup(title, desc) {
+        currentBookingItem = title;
+        document.getElementById('popupTitle').innerText = title;
+        document.getElementById('popupBookingInfo').innerHTML = `🎯 ${desc}`;
+        document.getElementById('popup').style.display = 'flex';
+    }
+
+    function openBookingPopup(item) {
+        currentBookingItem = item;
+        document.getElementById('popupTitle').innerText = 'Записаться';
+        document.getElementById('popupBookingInfo').innerHTML = `📌 Запись на: ${item}`;
+        document.getElementById('popup').style.display = 'flex';
+    }
+
+    function closePopup() {
+        document.getElementById('popup').style.display = 'none';
+        document.getElementById('popupForm').reset();
+        currentBookingItem = '';
+    }
+
+    window.onclick = function(e) {
+        const popup = document.getElementById('popup');
+        const alert = document.getElementById('customAlert');
+        if(e.target === popup) closePopup();
+        if(e.target === alert) closeCustomAlert();
+    }
+
+    function submitPopupForm(e) {
+        e.preventDefault();
+        const name = document.getElementById('popupName').value;
+        const phone = document.getElementById('popupPhone').value;
+        const messenger = document.getElementById('popupMessenger').value;
+        
+        if (!name || !phone) {
+            showCustomAlert('⚠️', 'Пожалуйста, заполните имя и телефон');
+            return;
+        }
+        
+        showSuccessMessage(name, phone, messenger);
+        closePopup();
+    }
+
+    // Анимации при скролле
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if(e.isIntersecting) e.target.classList.add('visible');
+        });
+    }, { threshold: 0.2 });
+    
+    document.querySelectorAll('.thesis-item, .teacher-card').forEach(el => observer.observe(el));
+    
+    // Логотип при скролле
+    window.addEventListener('scroll', () => {
+        const logo = document.getElementById('logo');
+        if(window.scrollY > 50) logo.classList.add('scrolled');
+        else logo.classList.remove('scrolled');
+    });
+    
+    // Форма в контактах
+    document.getElementById('contactForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = this.querySelector('input[placeholder="Имя"]').value;
+        showCustomAlert('✨', `Спасибо, ${name || 'друг'}! Мы свяжемся с вами в ближайшее время.`);
+        this.reset();
+    });
+</script>
+</body>
+</html>
