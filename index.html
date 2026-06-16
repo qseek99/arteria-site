@@ -17,6 +17,7 @@
             background: #FFFFFF;
             color: #1A1A1A;
             line-height: 1.5;
+            overflow-x: hidden;
         }
 
         .container {
@@ -27,6 +28,7 @@
 
         section {
             padding: 80px 0;
+            position: relative;
         }
 
         h2 {
@@ -45,11 +47,29 @@
             border-radius: 40px;
             cursor: pointer;
             transition: 0.25s;
+            position: relative;
+            overflow: hidden;
         }
         .btn-primary:hover {
             background: #B82D2D;
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(212,56,56,0.3);
+        }
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .btn-primary:hover::after {
+            width: 300px;
+            height: 300px;
         }
         .btn-secondary {
             background: transparent;
@@ -76,7 +96,31 @@
             text-decoration: underline;
         }
 
-        /* Hero с размытыми пятнами */
+        /* ===== ЯРКИЕ РИСОВАННЫЕ ДЕТАЛИ ===== */
+        .doodle {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .doodle svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .brush-stroke {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1;
+            border-radius: 60% 40% 70% 30% / 40% 50% 50% 60%;
+        }
+
+        .paint-drop {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1;
+            border-radius: 50%;
+        }
+
         .hero {
             position: relative;
             min-height: 100vh;
@@ -93,11 +137,22 @@
             filter: blur(50px);
             opacity: 0.5;
             pointer-events: none;
+            animation: floatBlob 12s ease-in-out infinite;
         }
-        .blob-red { background: #D43838; width: 350px; height: 350px; top: -100px; left: -80px; filter: blur(70px); }
-        .blob-blue { background: #4A90E2; width: 400px; height: 400px; bottom: -120px; right: -100px; filter: blur(80px); }
-        .blob-orange { background: #F5A623; width: 280px; height: 280px; top: 40%; left: 15%; filter: blur(60px); }
-        .blob-green { background: #2E7D32; width: 300px; height: 300px; bottom: 20%; right: 10%; filter: blur(65px); opacity: 0.35; }
+        .blob-red { background: #D43838; width: 350px; height: 350px; top: -100px; left: -80px; filter: blur(70px); animation-delay: 0s; }
+        .blob-blue { background: #4A90E2; width: 400px; height: 400px; bottom: -120px; right: -100px; filter: blur(80px); animation-delay: 2s; }
+        .blob-orange { background: #F5A623; width: 280px; height: 280px; top: 40%; left: 15%; filter: blur(60px); animation-delay: 4s; }
+        .blob-green { background: #2E7D32; width: 300px; height: 300px; bottom: 20%; right: 10%; filter: blur(65px); opacity: 0.35; animation-delay: 1s; }
+        .blob-pink { background: #D43838; width: 250px; height: 250px; top: 15%; right: 5%; filter: blur(55px); opacity: 0.4; animation-delay: 3s; }
+        .blob-light { background: #4A90E2; width: 320px; height: 320px; bottom: 5%; left: 5%; filter: blur(75px); opacity: 0.3; animation-delay: 5s; }
+
+        @keyframes floatBlob {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -20px) scale(1.05); }
+            50% { transform: translate(-20px, 30px) scale(0.95); }
+            75% { transform: translate(20px, 10px) scale(1.02); }
+        }
+
         .hero-content {
             position: relative;
             z-index: 2;
@@ -159,47 +214,90 @@
             50% { transform: translateY(10px); }
         }
 
-        /* Блоки */
+        .counter-wrap {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 20px;
+            background: #F7F6F4;
+            padding: 16px 24px;
+            border-radius: 60px;
+            display: inline-flex;
+        }
+        .counter-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #D43838;
+        }
+
         .two-columns { display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px; align-items: start; }
         .theses { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px; }
         .thesis-item { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
         .thesis-item.visible { opacity: 1; transform: translateY(0); }
         .thesis-icon { font-size: 32px; margin-bottom: 12px; }
+
+        .test-block {
+            background: linear-gradient(135deg, #D43838, #4A90E2);
+            border-radius: 32px;
+            padding: 48px;
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .test-block h3 { font-size: 28px; margin-bottom: 12px; }
+        .test-block p { font-size: 18px; margin-bottom: 24px; opacity: 0.9; }
+        .test-block .btn-primary {
+            background: white;
+            color: #D43838;
+        }
+        .test-block .btn-primary:hover {
+            background: #F7F6F4;
+        }
+
         .collage { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .color-block { border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; min-height: 200px; }
+        .color-block { border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; min-height: 200px; position: relative; overflow: hidden; }
         .color-block:first-child { grid-row: span 2; min-height: 420px; }
         .red-bg { background: linear-gradient(135deg, #D43838, #8B0000); }
         .blue-bg { background: linear-gradient(135deg, #4A90E2, #2c5aa0); }
         .orange-bg { background: linear-gradient(135deg, #F5A623, #D43838); }
+
         .cards-scroll { display: flex; gap: 24px; overflow-x: auto; padding-bottom: 16px; }
         .course-card { flex: 0 0 280px; background: #F7F6F4; border-radius: 32px; padding: 24px; transition: 0.3s; }
         .course-card:hover { transform: translateY(-8px); box-shadow: 0 20px 30px -10px rgba(0,0,0,0.1); }
         .course-price { font-size: 20px; font-weight: 700; color: #D43838; margin: 16px 0; }
         .card-buttons { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+
         .packages { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px; }
         .package-card { background: #F7F6F4; border-radius: 32px; padding: 32px 24px; text-align: center; }
+
         .schedule-item { display: grid; grid-template-columns: 100px 100px 1fr 80px auto; gap: 16px; align-items: center; padding: 16px 24px; background: #F9F9F9; border-radius: 60px; margin-bottom: 12px; }
         .places-green { color: #2E7D32; font-weight: 500; }
         .places-orange { color: #F5A623; font-weight: 500; }
+
         .masonry { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
         .gallery-block { border-radius: 24px; min-height: 250px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; font-weight: 500; cursor: pointer; }
+
         .teachers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: center; }
         .teacher-card { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
         .teacher-card.visible { opacity: 1; transform: translateY(0); }
         .teacher-avatar { width: 200px; height: 200px; border-radius: 50%; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; font-size: 64px; background: linear-gradient(135deg, #D43838, #4A90E2); }
+
         .testimonials-slider { display: flex; gap: 32px; overflow-x: auto; padding-bottom: 16px; }
         .testimonial-card { flex: 0 0 320px; background: #F7F6F4; padding: 32px; border-radius: 32px; }
         .stars { color: #F5A623; font-size: 20px; margin-bottom: 16px; letter-spacing: 4px; }
+
         .contacts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
         .map-placeholder { background: #E5E5E5; border-radius: 32px; overflow: hidden; }
         form input { width: 100%; padding: 14px 20px; margin-bottom: 16px; border: 1px solid #E5E5E5; border-radius: 60px; font-size: 16px; }
         form input:focus { outline: none; border-color: #D43838; }
+
         footer { background: #1A1A1A; color: white; padding: 40px 0; text-align: center; }
         .footer-social { display: flex; justify-content: center; gap: 24px; margin-top: 16px; }
-        .footer-social a { color: white; text-decoration: none; opacity: 0.7; transition: opacity 0.2s; }
+        .footer-social a { color: white; text-decoration: none; opacity: 0.7; }
         .footer-social a:hover { opacity: 1; }
 
-        /* ПОПАП */
         .popup {
             display: none;
             position: fixed;
@@ -259,7 +357,72 @@
         .company-btn:hover { background: rgba(212,56,56,0.05); border: 1.5px solid #D43838; }
         .popup-policy { font-size: 12px; color: #6B6B6B; text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid #E5E5E5; }
 
-        /* КАСТОМНОЕ ОКНО (вместо alert) */
+        .quiz-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
+            z-index: 1200;
+            justify-content: center;
+            align-items: center;
+        }
+        .quiz-content {
+            background: white;
+            max-width: 500px;
+            width: 90%;
+            border-radius: 48px;
+            padding: 40px 36px;
+            position: relative;
+            animation: popupFade 0.4s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .quiz-content h3 { font-size: 28px; text-align: center; margin-bottom: 8px; }
+        .quiz-content .subtitle { text-align: center; color: #6B6B6B; margin-bottom: 24px; font-size: 15px; }
+        .quiz-question { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+        .quiz-options button {
+            padding: 14px 20px;
+            border: 2px solid #E5E5E5;
+            border-radius: 60px;
+            background: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+        .quiz-options button:hover {
+            border-color: #D43838;
+            background: rgba(212,56,56,0.05);
+            transform: translateX(5px);
+        }
+        .quiz-result {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .quiz-result .big-icon { font-size: 72px; margin-bottom: 16px; }
+        .quiz-result h4 { font-size: 24px; margin-bottom: 8px; }
+        .quiz-result p { color: #6B6B6B; }
+        .quiz-progress {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+        .quiz-progress .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #E5E5E5;
+            transition: 0.3s;
+        }
+        .quiz-progress .dot.active { background: #D43838; }
+        .quiz-progress .dot.done { background: #2E7D32; }
+
         .custom-alert {
             display: none;
             position: fixed;
@@ -308,14 +471,82 @@
             .masonry { grid-template-columns: 1fr; }
             .teachers-grid { grid-template-columns: 1fr; }
             .theses { grid-template-columns: 1fr; }
-            .popup-content { padding: 32px 24px; }
-            .popup-content h3 { font-size: 24px; }
+            .popup-content, .quiz-content { padding: 32px 24px; }
+            .popup-content h3, .quiz-content h3 { font-size: 24px; }
             .custom-alert-content { padding: 28px 24px; }
             .custom-alert-content p { font-size: 16px; }
+            .test-block { padding: 32px 24px; }
+            .counter-wrap { padding: 12px 18px; }
+            .counter-number { font-size: 24px; }
         }
     </style>
 </head>
 <body>
+
+<!-- ===== ЯРКИЕ РИСОВАННЫЕ ДЕТАЛИ (СВЕРХУ СТРАНИЦЫ) ===== -->
+
+<!-- ❤️ БОЛЬШОЙ КРАСНЫЙ КРУГ с пунктиром - Блок 2 -->
+<div class="doodle" style="top: 120px; left: 20px; width: 120px; height: 120px; opacity: 0.4; z-index: 5;">
+    <svg viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="45" fill="none" stroke="#D43838" stroke-width="3" stroke-dasharray="8 6"/>
+        <circle cx="60" cy="60" r="22" fill="none" stroke="#4A90E2" stroke-width="3"/>
+        <circle cx="60" cy="60" r="8" fill="#F5A623"/>
+    </svg>
+</div>
+
+<!-- 💙 СИНИЙ МАЗОК - Блок 2 -->
+<div class="brush-stroke" style="width: 200px; height: 60px; top: 80px; right: 30px; background: rgba(74,144,226,0.3); transform: rotate(-30deg);"></div>
+
+<!-- 🧡 ОРАНЖЕВЫЙ МАЗОК - Блок 2 -->
+<div class="brush-stroke" style="width: 150px; height: 40px; top: 250px; right: 10px; background: rgba(245,166,35,0.35); transform: rotate(20deg);"></div>
+
+<!-- 💚 ЗЕЛЁНАЯ КАПЛЯ - Блок 3 -->
+<div class="paint-drop" style="width: 45px; height: 45px; top: 30px; left: 3%; background: rgba(46,125,50,0.25);"></div>
+
+<!-- 🔴 КРАСНАЯ КАПЛЯ - Блок 3 -->
+<div class="paint-drop" style="width: 35px; height: 35px; top: 100px; left: 6%; background: rgba(212,56,56,0.2);"></div>
+
+<!-- 🔵 СИНЯЯ КАПЛЯ - Блок 3 -->
+<div class="paint-drop" style="width: 50px; height: 50px; bottom: 50px; right: 2%; background: rgba(74,144,226,0.2);"></div>
+
+<!-- ✏️ РИСОВАННЫЕ ЛИНИИ - Блок 4 -->
+<div class="doodle" style="bottom: 30px; right: 20px; width: 120px; height: 80px; opacity: 0.35; z-index: 5;">
+    <svg viewBox="0 0 120 80">
+        <path d="M10 40 Q40 5 60 40 T100 40" fill="none" stroke="#4A90E2" stroke-width="2.5" stroke-dasharray="5 5"/>
+        <path d="M15 55 Q45 25 70 55" fill="none" stroke="#D43838" stroke-width="2"/>
+        <circle cx="90" cy="25" r="6" fill="#F5A623"/>
+    </svg>
+</div>
+
+<!-- 🎨 МАЗКИ В ГАЛЕРЕЕ - Блок 5 -->
+<div class="brush-stroke" style="width: 120px; height: 35px; top: 20px; right: 8%; background: rgba(212,56,56,0.2); transform: rotate(-45deg);"></div>
+<div class="brush-stroke" style="width: 90px; height: 30px; bottom: 30px; left: 3%; background: rgba(74,144,226,0.25); transform: rotate(55deg);"></div>
+
+<!-- 👤 РИСУНОК ЧЕЛОВЕКА - Блок 6 (Наставники) -->
+<div class="doodle" style="top: 60px; left: 3%; width: 100px; height: 100px; opacity: 0.3; z-index: 5;">
+    <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="30" r="15" fill="none" stroke="#D43838" stroke-width="2.5"/>
+        <path d="M35 55 L65 55 L50 40 Z" fill="none" stroke="#4A90E2" stroke-width="2.5"/>
+        <line x1="40" y1="70" x2="60" y2="70" stroke="#F5A623" stroke-width="2.5"/>
+    </svg>
+</div>
+
+<!-- 💛 ОРАНЖЕВАЯ КАПЛЯ - Блок 7 (Отзывы) -->
+<div class="paint-drop" style="width: 40px; height: 40px; top: 20px; right: 10%; background: rgba(245,166,35,0.25);"></div>
+
+<!-- ❤️ КРАСНАЯ КАПЛЯ - Блок 7 -->
+<div class="paint-drop" style="width: 30px; height: 30px; bottom: 50px; left: 2%; background: rgba(212,56,56,0.2);"></div>
+
+<!-- ✨ КВАДРАТ С КРЕСТОМ - Блок 8 (Контакты) -->
+<div class="doodle" style="top: 60px; right: 15px; width: 80px; height: 80px; opacity: 0.3; z-index: 5;">
+    <svg viewBox="0 0 80 80">
+        <rect x="20" y="20" width="40" height="40" fill="none" stroke="#D43838" stroke-width="2.5" stroke-dasharray="6 4"/>
+        <line x1="30" y1="30" x2="50" y2="50" stroke="#4A90E2" stroke-width="2.5"/>
+        <line x1="50" y1="30" x2="30" y2="50" stroke="#4A90E2" stroke-width="2.5"/>
+    </svg>
+</div>
+
+<!-- ===== КОНЕЦ РИСОВАННЫХ ДЕТАЛЕЙ ===== -->
 
 <div class="logo" id="logo">АРТерия</div>
 <div class="social-icons">
@@ -323,21 +554,30 @@
 </div>
 <div class="scroll-down" onclick="document.getElementById('philosophy').scrollIntoView({behavior:'smooth'})">↓</div>
 
-<!-- Hero с размытыми пятнами -->
+<!-- Hero -->
 <section class="hero">
     <div class="paint-blob blob-red"></div>
     <div class="paint-blob blob-blue"></div>
     <div class="paint-blob blob-orange"></div>
     <div class="paint-blob blob-green"></div>
+    <div class="paint-blob blob-pink"></div>
+    <div class="paint-blob blob-light"></div>
     <div class="hero-content">
         <h1>Пространство, где рождаются смыслы<br>и оживают холсты</h1>
         <div class="hero-sub">Мастер-классы • Курсы • Творческие встречи в центре Перми</div>
         <button class="btn-primary" onclick="openBookingPopup('общее занятие')">Записаться на занятие</button>
+        <br><br>
+        <button class="btn-secondary" onclick="openQuiz()">🎨 Пройти тест «Какой ты художник?»</button>
+        <div class="counter-wrap" style="margin-top: 24px;">
+            <span>🖌️ Уже пришло</span>
+            <span class="counter-number" id="studentCounter">0</span>
+            <span>учеников</span>
+        </div>
     </div>
 </section>
 
 <div class="container">
-    <!-- Блок 2: О студии / Философия -->
+    <!-- Блок 2: О студии -->
     <section id="philosophy">
         <div class="two-columns">
             <div>
@@ -359,7 +599,7 @@
         </div>
     </section>
 
-    <!-- Блок 3: Направления и курсы -->
+    <!-- Блок 3: Направления -->
     <section>
         <h2>Что мы создаём</h2>
         <div class="cards-scroll">
@@ -374,6 +614,18 @@
             <div class="package-card"><h3>Базовый</h3><p>2 часа</p><p>до 10 чел</p><p class="course-price">5000 ₽</p><button class="btn-secondary" onclick="openBookingPopup('Базовый пакет')">Забронировать</button></div>
             <div class="package-card"><h3>Стандарт</h3><p>3 часа + бокал</p><p>до 20 чел</p><p class="course-price">8000 ₽</p><button class="btn-secondary" onclick="openBookingPopup('Стандарт пакет')">Забронировать</button></div>
             <div class="package-card"><h3>Премиум</h3><p>4 часа + фуршет</p><p>до 30 чел</p><p class="course-price">12000 ₽</p><button class="btn-secondary" onclick="openBookingPopup('Премиум пакет')">Забронировать</button></div>
+        </div>
+
+        <div class="test-block">
+            <div class="doodle" style="top: 10px; right: 20px; width: 100px; height: 100px; opacity: 0.25; z-index: 5;">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="35" fill="none" stroke="white" stroke-width="2.5" stroke-dasharray="8 6"/>
+                    <circle cx="50" cy="50" r="18" fill="none" stroke="white" stroke-width="2"/>
+                </svg>
+            </div>
+            <h3>🎨 Какой ты художник?</h3>
+            <p>Пройди наш тест и узнай, какой стиль творчества тебе подходит!<br>🔥 Это займёт всего 30 секунд</p>
+            <button class="btn-primary" onclick="openQuiz()">Начать тест →</button>
         </div>
     </section>
 
@@ -418,10 +670,9 @@
         </div>
     </section>
 
-    <!-- Блок 8: Контакты (С ИСПРАВЛЕННЫМ НОМЕРОМ) -->
+    <!-- Блок 8: Контакты -->
     <section>
         <div class="contacts-grid">
-            <!-- Яндекс.Карта -->
             <div class="map-placeholder">
                 <iframe src="https://yandex.ru/maps/org/arteriya/113949424724/?ll=56.143588%2C58.021229&z=15&l=map" 
                         width="100%" 
@@ -431,37 +682,22 @@
                         allowfullscreen>
                 </iframe>
             </div>
-
             <div>
                 <h3>Контакты</h3>
-                <p>
-                    <strong>📍 Адрес:</strong><br>
-                    г. Пермь, ул. Советской Армии, 72/4
-                </p>
-                <p>
-                    <strong>🕒 Часы работы:</strong><br>
-                    вт-вс 11:00–21:00
-                </p>
-                <p>
-                    <strong>📞 Телефон для записи:</strong><br>
-                    <!-- НОМЕР ИСПРАВЛЕН НА +7 (922) 361-98-81 -->
-                    <a href="tel:+79223619881" style="color: #D43838; text-decoration: none; font-weight: 500;">+7 (922) 361-98-81</a>
-                </p>
-                
+                <p><strong>📍 Адрес:</strong><br>г. Пермь, ул. Советской Армии, 72/4</p>
+                <p><strong>🕒 Часы работы:</strong><br>вт-вс 11:00–21:00</p>
+                <p><strong>📞 Телефон для записи:</strong><br><a href="tel:+79223619881" style="color: #D43838; text-decoration: none; font-weight: 500;">+7 (922) 361-98-81</a></p>
                 <form id="contactForm">
                     <input type="text" placeholder="Имя" required>
                     <input type="tel" placeholder="Телефон" required>
                     <button type="submit" class="btn-primary" style="width:100%">Отправить заявку</button>
                 </form>
-                <p style="margin-top:16px; font-size:14px; color:#6B6B6B">
-                    Остались вопросы? Оставьте заявку — мы перезвоним
-                </p>
+                <p style="margin-top:16px; font-size:14px; color:#6B6B6B">Остались вопросы? Оставьте заявку — мы перезвоним</p>
             </div>
         </div>
     </section>
 </div>
 
-<!-- FOOTER (ПОДВАЛ) -->
 <footer>
     <p>© АРТерия, 2026 | Политика конфиденциальности</p>
     <div class="footer-social">
@@ -469,7 +705,7 @@
     </div>
 </footer>
 
-<!-- ПОПАП ДЛЯ ЗАПИСИ -->
+<!-- ПОПАПЫ -->
 <div id="popup" class="popup">
     <div class="popup-content">
         <div class="close-popup" onclick="closePopup()">✕</div>
@@ -488,7 +724,23 @@
     </div>
 </div>
 
-<!-- КАСТОМНОЕ ОКНО ДЛЯ СООБЩЕНИЙ -->
+<!-- ОПРОС -->
+<div id="quizPopup" class="quiz-popup">
+    <div class="quiz-content">
+        <div class="close-popup" onclick="closeQuiz()">✕</div>
+        <h3>🎨 Какой ты художник?</h3>
+        <p class="subtitle">Ответь на 4 вопроса и узнай свой творческий стиль!</p>
+        <div class="quiz-progress" id="quizProgress">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+        <div id="quizBody"></div>
+    </div>
+</div>
+
+<!-- КАСТОМНОЕ ОКНО -->
 <div id="customAlert" class="custom-alert">
     <div class="custom-alert-content">
         <div class="custom-alert-icon" id="alertIcon">🎉</div>
@@ -500,98 +752,69 @@
 <script>
     let currentBookingItem = '';
 
-    // Кастомное окно
-    function showCustomAlert(icon, message) {
-        document.getElementById('alertIcon').innerText = icon || '🎨';
-        document.getElementById('alertMessage').innerHTML = message;
-        document.getElementById('customAlert').style.display = 'flex';
+    const quizData = [
+        { question: 'Что тебя больше всего привлекает в творчестве?', options: ['🎨 Процесс смешивания красок', '✏️ Точность и детали', '🌈 Свобода и спонтанность', '🖼️ Создание красоты'] },
+        { question: 'Какой цвет тебе ближе?', options: ['🔴 Красный — энергия', '🔵 Синий — спокойствие', '🟡 Жёлтый — радость', '🟢 Зелёный — гармония'] },
+        { question: 'Что ты ищешь в творчестве?', options: ['🧘 Эмоциональную разгрузку', '🎯 Самореализацию', '👥 Общение', '🏆 Признание'] },
+        { question: 'Какой стиль тебе ближе?', options: ['🎭 Абстракция', '🌿 Реализм', '✨ Импрессионизм', '🌀 Сюрреализм'] }
+    ];
+
+    const quizResults = [
+        { icon: '🎨', title: 'Экспрессионист', desc: 'Ты чувствуешь цвет и движение! Твои работы полны эмоций и энергии.' },
+        { icon: '✏️', title: 'Реалист', desc: 'Ты внимателен к деталям и стремишься к совершенству.' },
+        { icon: '🌈', title: 'Импрессионист', desc: 'Ты видишь свет и настроение. Твои работы — это настроение момента.' },
+        { icon: '🌀', title: 'Сюрреалист', desc: 'Твой внутренний мир полон фантазий. Ты создаёшь магию!' }
+    ];
+
+    let currentQuestion = 0;
+    let answers = [];
+
+    function openQuiz() { currentQuestion = 0; answers = []; document.getElementById('quizPopup').style.display = 'flex'; renderQuestion(); }
+    function closeQuiz() { document.getElementById('quizPopup').style.display = 'none'; }
+
+    function renderQuestion() {
+        const body = document.getElementById('quizBody');
+        const dots = document.querySelectorAll('#quizProgress .dot');
+        dots.forEach((dot, i) => { dot.className = 'dot'; if (i < currentQuestion) dot.classList.add('done'); if (i === currentQuestion) dot.classList.add('active'); });
+        if (currentQuestion < quizData.length) {
+            const q = quizData[currentQuestion];
+            let html = `<div class="quiz-question">${q.question}</div><div class="quiz-options">`;
+            q.options.forEach((opt, i) => { html += `<button onclick="selectAnswer(${i})">${opt}</button>`; });
+            html += `</div>`;
+            body.innerHTML = html;
+        } else { showResult(); }
     }
 
-    function showSuccessMessage(name, phone, messenger) {
-        let message = `✨ Спасибо, ${name}! ✨<br><br>Мы уже рисуем для вас напоминание и свяжемся с вами по телефону ${phone} в ближайший час.<br><br>🎨 АРТерия — место, где рождаются смыслы`;
-        if (messenger) {
-            message += `<br><br>(Напишем также в ${messenger})`;
-        }
-        document.getElementById('alertIcon').innerText = '🎨✨';
-        document.getElementById('alertMessage').innerHTML = message;
-        document.getElementById('customAlert').style.display = 'flex';
+    function selectAnswer(index) { answers.push(index); currentQuestion++; renderQuestion(); }
+
+    function showResult() {
+        const sum = answers.reduce((a, b) => a + b, 0);
+        const result = quizResults[sum % quizResults.length];
+        document.getElementById('quizBody').innerHTML = `<div class="quiz-result"><div class="big-icon">${result.icon}</div><h4>Ты — ${result.title}!</h4><p>${result.desc}</p><br><button class="btn-primary" onclick="closeQuiz(); openBookingPopup('запись после теста')">🎨 Записаться на мастер-класс</button><br><br><button class="btn-secondary" onclick="closeQuiz()">✕ Закрыть</button></div>`;
     }
 
-    function showCompanyMessage() {
-        document.getElementById('alertIcon').innerText = '👥🎉';
-        document.getElementById('alertMessage').innerHTML = 'Отлично! Компанией всегда веселее!<br><br>Мы подберём для вас удобную дату, формат и рассчитаем скидку.<br><br>Оставьте заявку в форме выше, и менеджер свяжется с вами для подбора формата.';
-        document.getElementById('customAlert').style.display = 'flex';
-    }
+    function showCustomAlert(icon, message) { document.getElementById('alertIcon').innerText = icon || '🎨'; document.getElementById('alertMessage').innerHTML = message; document.getElementById('customAlert').style.display = 'flex'; }
+    function showSuccessMessage(name, phone, messenger) { let message = `✨ Спасибо, ${name}! ✨<br><br>Мы уже рисуем для вас напоминание и свяжемся с вами по телефону ${phone} в ближайший час.<br><br>🎨 АРТерия — место, где рождаются смыслы`; if (messenger) { message += `<br><br>(Напишем также в ${messenger})`; } document.getElementById('alertIcon').innerText = '🎨✨'; document.getElementById('alertMessage').innerHTML = message; document.getElementById('customAlert').style.display = 'flex'; }
+    function showCompanyMessage() { document.getElementById('alertIcon').innerText = '👥🎉'; document.getElementById('alertMessage').innerHTML = 'Отлично! Компанией всегда веселее!<br><br>Мы подберём для вас удобную дату, формат и рассчитаем скидку.<br><br>Оставьте заявку в форме выше, и менеджер свяжется с вами для подбора формата.'; document.getElementById('customAlert').style.display = 'flex'; }
+    function closeCustomAlert() { document.getElementById('customAlert').style.display = 'none'; }
 
-    function closeCustomAlert() {
-        document.getElementById('customAlert').style.display = 'none';
-    }
+    function openDetailPopup(title, desc) { currentBookingItem = title; document.getElementById('popupTitle').innerText = title; document.getElementById('popupBookingInfo').innerHTML = `🎯 ${desc}`; document.getElementById('popup').style.display = 'flex'; }
+    function openBookingPopup(item) { currentBookingItem = item; document.getElementById('popupTitle').innerText = 'Записаться'; document.getElementById('popupBookingInfo').innerHTML = `📌 Запись на: ${item}`; document.getElementById('popup').style.display = 'flex'; }
+    function closePopup() { document.getElementById('popup').style.display = 'none'; document.getElementById('popupForm').reset(); currentBookingItem = ''; }
 
-    function openDetailPopup(title, desc) {
-        currentBookingItem = title;
-        document.getElementById('popupTitle').innerText = title;
-        document.getElementById('popupBookingInfo').innerHTML = `🎯 ${desc}`;
-        document.getElementById('popup').style.display = 'flex';
-    }
+    window.onclick = function(e) { const popup = document.getElementById('popup'); const alert = document.getElementById('customAlert'); const quiz = document.getElementById('quizPopup'); if(e.target === popup) closePopup(); if(e.target === alert) closeCustomAlert(); if(e.target === quiz) closeQuiz(); }
 
-    function openBookingPopup(item) {
-        currentBookingItem = item;
-        document.getElementById('popupTitle').innerText = 'Записаться';
-        document.getElementById('popupBookingInfo').innerHTML = `📌 Запись на: ${item}`;
-        document.getElementById('popup').style.display = 'flex';
-    }
+    function submitPopupForm(e) { e.preventDefault(); const name = document.getElementById('popupName').value; const phone = document.getElementById('popupPhone').value; const messenger = document.getElementById('popupMessenger').value; if (!name || !phone) { showCustomAlert('⚠️', 'Пожалуйста, заполните имя и телефон'); return; } showSuccessMessage(name, phone, messenger); closePopup(); }
 
-    function closePopup() {
-        document.getElementById('popup').style.display = 'none';
-        document.getElementById('popupForm').reset();
-        currentBookingItem = '';
-    }
+    let counterAnimated = false;
+    function animateCounter() { if (counterAnimated) return; counterAnimated = true; const target = 847; let current = 0; const step = Math.ceil(target / 40); const el = document.getElementById('studentCounter'); const interval = setInterval(() => { current += step; if (current >= target) { current = target; clearInterval(interval); } el.textContent = current; }, 30); }
 
-    window.onclick = function(e) {
-        const popup = document.getElementById('popup');
-        const alert = document.getElementById('customAlert');
-        if(e.target === popup) closePopup();
-        if(e.target === alert) closeCustomAlert();
-    }
+    const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); if (e.target.classList.contains('counter-number')) { animateCounter(); } } }); }, { threshold: 0.2 });
+    document.querySelectorAll('.thesis-item, .teacher-card, .counter-number').forEach(el => observer.observe(el));
 
-    function submitPopupForm(e) {
-        e.preventDefault();
-        const name = document.getElementById('popupName').value;
-        const phone = document.getElementById('popupPhone').value;
-        const messenger = document.getElementById('popupMessenger').value;
-        
-        if (!name || !phone) {
-            showCustomAlert('⚠️', 'Пожалуйста, заполните имя и телефон');
-            return;
-        }
-        
-        showSuccessMessage(name, phone, messenger);
-        closePopup();
-    }
+    window.addEventListener('scroll', () => { const logo = document.getElementById('logo'); if(window.scrollY > 50) logo.classList.add('scrolled'); else logo.classList.remove('scrolled'); });
 
-    // Анимации при скролле
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-            if(e.isIntersecting) e.target.classList.add('visible');
-        });
-    }, { threshold: 0.2 });
-    
-    document.querySelectorAll('.thesis-item, .teacher-card').forEach(el => observer.observe(el));
-    
-    // Логотип при скролле
-    window.addEventListener('scroll', () => {
-        const logo = document.getElementById('logo');
-        if(window.scrollY > 50) logo.classList.add('scrolled');
-        else logo.classList.remove('scrolled');
-    });
-    
-    // Форма в контактах
-    document.getElementById('contactForm')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const name = this.querySelector('input[placeholder="Имя"]').value;
-        showCustomAlert('✨', `Спасибо, ${name || 'друг'}! Мы свяжемся с вами в ближайшее время.`);
-        this.reset();
-    });
+    document.getElementById('contactForm')?.addEventListener('submit', function(e) { e.preventDefault(); const name = this.querySelector('input[placeholder="Имя"]').value; showCustomAlert('✨', `Спасибо, ${name || 'друг'}! Мы свяжемся с вами в ближайшее время.`); this.reset(); });
 </script>
 </body>
 </html>
